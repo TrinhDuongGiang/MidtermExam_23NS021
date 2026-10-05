@@ -32,7 +32,7 @@ app.use(
             mongoUrl: process.env.MONGO_WRITE_URI
         }),
         cookie: {
-            maxAge: 1000 * 60 * 60 * 2
+            maxAge: 1000 * 60 * 60
         }
     })
 );
@@ -69,12 +69,11 @@ app.get("/", async (req, res) => {
     }
 });
 
-
 app.post("/books", async (req, res) => {
     try {
         const { productCode, name, price } = req.body;
 
-        if (!productCode.startsWith(productPrefix)) {
+        if (!productCode || !productCode.startsWith(productPrefix)) {
             return res.status(400).send(
                 `Invalid product code. Product code must start with ${productPrefix}.`
             );
@@ -105,6 +104,8 @@ app.post("/books", async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+app.listen(process.env.PORT || 3000, () => {
+    console.log(
+        "Server running on port " + (process.env.PORT || 3000)
+    );
 });
